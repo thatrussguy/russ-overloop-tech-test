@@ -35,8 +35,10 @@ module.exports.all = async function (ctx) {
 };
 
 module.exports.create = async function (ctx) {
+  // not a mongo/mongoose expert just yet... there must a more efficient way to do this
   const { territories } = ctx.request.body;
   return Promise.all(
+    // upsert all the territories and map to their ObjectId for embedding in Article
     territories.map(async (territory) => {
       const result = await Territory.findOneAndUpdate(territory, territory, {
         upsert: true,
@@ -66,7 +68,6 @@ module.exports.create = async function (ctx) {
 
 module.exports.update = async function (ctx) {
   const { territories } = ctx.request.body;
-  console.log(ctx.request.body);
   return Promise.all(
     territories.map(async (territory) => {
       const result = await Territory.findOneAndUpdate(territory, territory, {
