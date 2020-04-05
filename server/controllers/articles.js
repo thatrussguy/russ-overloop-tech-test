@@ -29,7 +29,8 @@ module.exports.one = async function (ctx) {
 
 module.exports.all = async function (ctx) {
   ctx.body = {
-    articles: await Article.find(),
+    articles: await Article.find().populate("territories"),
+    territories: await Territory.find(),
   };
 };
 
