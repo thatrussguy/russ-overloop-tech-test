@@ -126,9 +126,9 @@ class List extends Component {
           {// filter based on selected territories (if any)
           (filter.length
             ? data.filter(({ territories }) =>
-                territories
-                  .map(({ name }) => name)
-                  .some((territory) => filter.includes(territory))
+                filter.every((territory) =>
+                  territories.map(({ name }) => name).includes(territory)
+                )
               )
             : data
           ).map((article) => (
