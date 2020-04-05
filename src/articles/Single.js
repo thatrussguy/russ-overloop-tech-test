@@ -189,7 +189,7 @@ class Single extends Component {
               type="textarea"
               name="territories"
               id="territories"
-              placeholder="Article Territories"
+              placeholder="Article Territories (separated by a space)"
               onChange={(e) => this.updateTerritories(e)}
               value={this.state.territories}
               disabled={this.state.loading}
