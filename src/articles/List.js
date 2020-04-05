@@ -13,6 +13,7 @@ class List extends Component {
       error: null,
       territories: null,
       filter: [],
+      showFilter: false,
     };
   }
 
@@ -57,12 +58,26 @@ class List extends Component {
     });
   };
 
+  toggleFilter = () => {
+    this.setState(({ showFilter }) => ({
+      showFilter: !showFilter,
+      filter: [],
+    }));
+  };
+
   componentWillMount() {
     this.fetch();
   }
 
   render() {
-    const { data, error, filter, loading, territories } = this.state;
+    const {
+      data,
+      error,
+      filter,
+      loading,
+      showFilter,
+      territories,
+    } = this.state;
     if (error) {
       return <div>{error.toString()}</div>;
     }
@@ -77,29 +92,36 @@ class List extends Component {
           </Button>
         </div>
         <div>
-          <Form>
-            <FormGroup row>
-              <Label for="territorySelect" sm={2}>
-                Select territories (ctrl+click for multiple)
-              </Label>
-              <Col sm={10}>
-                <Input
-                  onChange={this.handleFilterChange}
-                  // show up to 10 options at a time
-                  size={String(Math.min(10, territories.length))}
-                  type="select"
-                  id="territorySelect"
-                  multiple
-                >
-                  <option hidden></option>
-                  {territories.map(({ name, _id }) => (
-                    <option key={_id}>{name}</option>
-                  ))}
-                </Input>
-              </Col>
-            </FormGroup>
-          </Form>
+          <Button onClick={this.toggleFilter}>
+            {showFilter ? "Clear filter" : "Filter by territory"}
+          </Button>
         </div>
+        {showFilter && (
+          <div>
+            <Form>
+              <FormGroup row>
+                <Label for="territorySelect" sm={2}>
+                  Select territories (ctrl+click for multiple)
+                </Label>
+                <Col sm={10}>
+                  <Input
+                    onChange={this.handleFilterChange}
+                    // show up to 10 options at a time
+                    size={String(Math.min(10, territories.length))}
+                    type="select"
+                    id="territorySelect"
+                    multiple
+                  >
+                    <option hidden></option>
+                    {territories.map(({ name, _id }) => (
+                      <option key={_id}>{name}</option>
+                    ))}
+                  </Input>
+                </Col>
+              </FormGroup>
+            </Form>
+          </div>
+        )}
         <ul className="ArticleList">
           {// filter based on selected territories (if any)
           (filter.length
